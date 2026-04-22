@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas IA</title>
+    <meta
+      name="description"
+      content="Atlas IA es un sitio editorial sobre la inteligencia artificial: historia, modelos, herramientas, comparativas, impacto ambiental y uso responsable."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#inicio">
+          <span class="brand-mark"></span>
+          <span class="brand-text">
+            <strong>Atlas IA</strong>
+            <small>Historia, herramientas e impacto</small>
+          </span>
+        </a>
+
+        <nav class="top-nav" aria-label="Principal">
+          <a href="#fundamentos">Fundamentos</a>
+          <a href="#timeline">Historia</a>
+          <a href="#catalogo">Catálogo</a>
+          <a href="#comparativa">Comparativa</a>
+          <a href="#impacto">Impacto</a>
+          <a href="#futuro">Futuro</a>
+        </nav>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
+          Menú
+        </button>
+      </header>
+
+      <nav class="mobile-nav" id="mobile-nav" aria-label="Móvil" hidden>
+        <a href="#fundamentos">Fundamentos</a>
+        <a href="#timeline">Historia</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#comparativa">Comparativa</a>
+        <a href="#impacto">Impacto</a>
+        <a href="#futuro">Futuro</a>
+      </nav>
+
+      <main>
+        <section class="hero" id="inicio">
+          <div class="hero-copy">
+            <p class="eyebrow">Proyecto de computación</p>
+            <h1>Una mirada clara a la inteligencia artificial.</h1>
+            <p class="hero-lead">
+              Qué es, cómo empezó, qué herramientas dominan hoy, cómo compararlas y
+              qué costos sociales y ambientales no se deben ignorar.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#fundamentos">Explorar el sitio</a>
+              <a class="button secondary" href="#comparativa">Ver comparativas</a>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <article class="glass-panel hero-card hero-card-main">
+              <span class="panel-label">Panorama actual</span>
+              <h2>Texto, imagen, video, código y agentes</h2>
+              <p>
+                La IA pasó de resolver tareas concretas a producir contenido,
+                asistir decisiones y operar como interfaz de trabajo.
+              </p>
+            </article>
+
+            <article class="glass-panel hero-card hero-card-side">
+              <span class="panel-label">Idea central</span>
+              <p>
+                La IA no es una sola herramienta: es un ecosistema de modelos,
+                costos, usos y riesgos.
+              </p>
+            </article>
+
+            <article class="hero-stat">
+              <strong>6</strong>
+              <span>bloques temáticos</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="intro-strip">
+          <article>
+            <span>Aprender</span>
+            <p>Conceptos básicos para entender qué hace realmente una IA.</p>
+          </article>
+          <article>
+            <span>Comparar</span>
+            <p>Herramientas organizadas por funciones, ventajas y límites.</p>
+          </article>
+          <article>
+            <span>Cuestionar</span>
+            <p>Impacto ambiental, sesgos, privacidad y uso responsable.</p>
+          </article>
+        </section>
+
+        <section class="section editorial" id="fundamentos">
+          <div class="section-heading">
+            <p class="eyebrow">01. Fundamentos</p>
+            <h2>Antes de comparar herramientas, hay que entender qué es la IA.</h2>
+            <p>
+              Este bloque aclara términos que suelen mezclarse. La idea es evitar
+              una explicación superficial y construir una base útil para el resto del sitio.
+            </p>
+          </div>
+
+          <div class="two-column-grid">
+            <article class="content-block">
+              <h3>Qué es la inteligencia artificial</h3>
+              <ul>
+                <li>
+                  Es un campo de la computación que busca que las máquinas realicen
+                  tareas asociadas con inteligencia humana, como interpretar lenguaje,
+                  detectar patrones o generar contenido.
+                </li>
+                <li>
+                  No toda automatización es IA: un sistema con reglas fijas puede ser
+                  útil, pero no aprende ni generaliza como un modelo entrenado con datos.
+                </li>
+                <li>
+                  En la vida diaria aparece en asistentes de voz, motores de recomendación,
+                  filtros de spam, traductores y editores inteligentes.
+                </li>
+              </ul>
+            </article>
+
+            <article class="content-block">
+              <h3>IA, machine learning y deep learning</h3>
+              <ul>
+                <li><strong>IA:</strong> término amplio para sistemas que simulan tareas cognitivas.</li>
+                <li><strong>Machine learning:</strong> técnica donde el sistema aprende a partir de datos.</li>
+                <li><strong>Deep learning:</strong> enfoque basado en redes neuronales con muchas capas.</li>
+                <li>
+                  Esta diferencia importa porque no todas las herramientas actuales usan
+                  la misma complejidad ni requieren el mismo nivel de datos o cómputo.
+                </li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="concept-rail">
+            <article class="glass-panel concept-card">
+              <span class="panel-label">Entrada</span>
+              <h3>Datos</h3>
+              <p>Texto, imagen, audio, video o registros históricos que el modelo analiza.</p>
+            </article>
+            <article class="glass-panel concept-card">
+              <span class="panel-label">Proceso</span>
+              <h3>Patrones</h3>
+              <p>La IA detecta relaciones estadísticas y las usa para predecir o generar.</p>
+            </article>
+            <article class="glass-panel concept-card">
+              <span class="panel-label">Salida</span>
+              <h3>Respuesta</h3>
+              <p>Un resumen, una imagen, una línea de código o una clasificación automática.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section timeline-section" id="timeline">
+          <div class="section-heading">
+            <p class="eyebrow">02. Historia</p>
+            <h2>La IA no nació con los chatbots: llegó tras décadas de intentos.</h2>
+            <p>
+              Esta línea del tiempo muestra cómo cambió la disciplina desde la lógica
+              matemática hasta los modelos multimodales capaces de trabajar con texto,
+              imagen, audio y video.
+            </p>
+          </div>
+
+          <div class="timeline">
+            <article class="timeline-item">
+              <span class="timeline-year">1950</span>
+              <h3>Alan Turing plantea la gran pregunta</h3>
+              <p>
+                Propone evaluar si una máquina puede comportarse de manera
+                suficientemente inteligente como para confundirse con un humano en conversación.
+              </p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">1956</span>
+              <h3>Dartmouth y el nacimiento formal del campo</h3>
+              <p>
+                El término “inteligencia artificial” se consolida y comienza una etapa
+                de altas expectativas sobre máquinas capaces de razonar.
+              </p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">1980s</span>
+              <h3>Sistemas expertos</h3>
+              <p>
+                Surgen programas que usan reglas escritas por humanos para resolver
+                tareas específicas en medicina, industria y diagnóstico.
+              </p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">2012</span>
+              <h3>Deep learning gana fuerza</h3>
+              <p>
+                El uso de redes neuronales profundas junto con GPUs y grandes bases de
+                datos produce avances visibles en visión por computadora.
+              </p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">2017</span>
+              <h3>Transformers cambian el juego</h3>
+              <p>
+                Esta arquitectura mejora drásticamente el tratamiento del lenguaje y abre
+                el camino para asistentes generativos más potentes.
+              </p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">2022+</span>
+              <h3>Explosión de la IA generativa</h3>
+              <p>
+                Modelos de texto, imagen, video y código empiezan a integrarse en trabajo,
+                estudio, marketing, diseño y desarrollo de software.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section catalog-section" id="catalogo">
+          <div class="section-heading">
+            <p class="eyebrow">03. Catálogo</p>
+            <h2>Las herramientas cambian según la tarea: no existe una “mejor IA” universal.</h2>
+            <p>
+              Filtra por categoría y revisa qué aporta cada familia de herramientas,
+              qué resuelve bien y dónde suelen fallar.
+            </p>
+          </div>
+
+          <div class="filter-bar" role="tablist" aria-label="Categorías de IA">
+            <button class="filter-pill active" type="button" data-filter="all">Todas</button>
+            <button class="filter-pill" type="button" data-filter="texto">Texto</button>
+            <button class="filter-pill" type="button" data-filter="imagen">Imagen</button>
+            <button class="filter-pill" type="button" data-filter="video">Video</button>
+            <button class="filter-pill" type="button" data-filter="codigo">Código</button>
+          </div>
+
+          <div class="catalog-grid">
+            <article class="tool-card" data-category="texto">
+              <span class="tool-type">Texto</span>
+              <h3>Asistentes conversacionales</h3>
+              <p>
+                Sirven para resumir, redactar, traducir, investigar y explicar ideas.
+                Son versátiles, pero pueden responder con seguridad incluso cuando se equivocan.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> rapidez para organizar información.</li>
+                <li><strong>Límite:</strong> riesgo de alucinaciones y citas erróneas.</li>
+                <li><strong>Ejemplos:</strong> ChatGPT, Claude, Gemini, Perplexity.</li>
+              </ul>
+            </article>
+
+            <article class="tool-card" data-category="imagen">
+              <span class="tool-type">Imagen</span>
+              <h3>Generadores visuales</h3>
+              <p>
+                Transforman descripciones en ilustraciones, retratos o escenas
+                fotorrealistas. Son útiles para diseño conceptual, identidad visual y publicidad.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> exploración creativa rápida.</li>
+                <li><strong>Límite:</strong> control fino y derechos de autor.</li>
+                <li><strong>Ejemplos:</strong> Midjourney, DALL·E, Firefly, Stable Diffusion.</li>
+              </ul>
+            </article>
+
+            <article class="tool-card" data-category="video">
+              <span class="tool-type">Video</span>
+              <h3>Modelos para secuencias y animación</h3>
+              <p>
+                Generan clips, animan imágenes y aceleran la edición audiovisual.
+                Son llamativos, pero todavía enfrentan problemas de coherencia en movimiento.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> prototipado audiovisual muy rápido.</li>
+                <li><strong>Límite:</strong> duración corta y errores visuales.</li>
+                <li><strong>Ejemplos:</strong> Runway, Pika, Sora, Kling.</li>
+              </ul>
+            </article>
+
+            <article class="tool-card" data-category="codigo">
+              <span class="tool-type">Código</span>
+              <h3>Copilotos de programación</h3>
+              <p>
+                Ayudan a escribir funciones, explicar errores y proponer refactors.
+                Mejoran productividad, pero exigen revisión técnica humana.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> acelerar tareas repetitivas.</li>
+                <li><strong>Límite:</strong> código inseguro o impreciso si no se valida.</li>
+                <li><strong>Ejemplos:</strong> GitHub Copilot, Cursor, ChatGPT, Claude.</li>
+              </ul>
+            </article>
+
+            <article class="tool-card" data-category="texto">
+              <span class="tool-type">Texto</span>
+              <h3>Motores de búsqueda con IA</h3>
+              <p>
+                Integran respuestas resumidas con fuentes y navegación web. Son útiles
+                para investigación rápida, sobre todo cuando se necesita contexto.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> síntesis con navegación.</li>
+                <li><strong>Límite:</strong> depende de la calidad de las fuentes citadas.</li>
+                <li><strong>Uso ideal:</strong> trabajos escolares y análisis comparativos.</li>
+              </ul>
+            </article>
+
+            <article class="tool-card" data-category="imagen">
+              <span class="tool-type">Imagen</span>
+              <h3>Edición asistida</h3>
+              <p>
+                Permite borrar fondos, ampliar escenas, cambiar estilos o restaurar
+                fotografías. Suele ser más práctica para producción que la generación pura.
+              </p>
+              <ul>
+                <li><strong>Fortaleza:</strong> ahorro de tiempo en retoque.</li>
+                <li><strong>Límite:</strong> resultados artificiales si se exagera la edición.</li>
+                <li><strong>Uso ideal:</strong> diseño, e-commerce y contenido social.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section comparison-section" id="comparativa">
+          <div class="section-heading">
+            <p class="eyebrow">04. Comparativa</p>
+            <h2>Comparar bien significa definir criterios, no solo elegir favoritos.</h2>
+            <p>
+              En lugar de un ranking absoluto, esta tabla resume qué herramienta tiende
+              a destacar según la tarea, el nivel de control y el presupuesto.
+            </p>
+          </div>
+
+          <div class="comparison-shell glass-panel">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Área</th>
+                  <th>Qué se valora</th>
+                  <th>Herramientas destacadas</th>
+                  <th>Nivel de costo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Texto</td>
+                  <td>Claridad, contexto, investigación, idioma</td>
+                  <td>ChatGPT, Claude, Gemini, Perplexity</td>
+                  <td>Variable</td>
+                </tr>
+                <tr>
+                  <td>Imagen</td>
+                  <td>Estilo, detalle, control creativo, velocidad</td>
+                  <td>Midjourney, DALL·E, Firefly, Stable Diffusion</td>
+                  <td>Medio a alto</td>
+                </tr>
+                <tr>
+                  <td>Video</td>
+                  <td>Coherencia visual, movimiento, duración, edición</td>
+                  <td>Runway, Pika, Sora, Kling</td>
+                  <td>Alto</td>
+                </tr>
+                <tr>
+                  <td>Código</td>
+                  <td>Precisión técnica, contexto, productividad</td>
+                  <td>GitHub Copilot, Cursor, ChatGPT, Claude</td>
+                  <td>Medio</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="comparison-note">
+              Esta versión usa niveles de costo orientativos. Los precios exactos se pueden
+              añadir en la siguiente iteración con verificación por fecha.
+            </p>
+          </div>
+
+          <div class="ranking-grid">
+            <article class="ranking-card">
+              <span class="panel-label">Mejor para estudiantes</span>
+              <h3>Texto + búsqueda</h3>
+              <p>
+                Conviene priorizar herramientas que expliquen bien, permitan repreguntar
+                y ayuden a verificar información.
+              </p>
+            </article>
+            <article class="ranking-card">
+              <span class="panel-label">Mejor para creativos</span>
+              <h3>Imagen + video</h3>
+              <p>
+                El valor está en el estilo, la iteración visual y la rapidez para convertir
+                ideas en prototipos.
+              </p>
+            </article>
+            <article class="ranking-card">
+              <span class="panel-label">Mejor relación utilidad / costo</span>
+              <h3>Texto + código</h3>
+              <p>
+                Suelen dar más valor diario por consulta, especialmente en estudio,
+                redacción y desarrollo web.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section impact-section" id="impacto">
+          <div class="section-heading">
+            <p class="eyebrow">05. Impacto</p>
+            <h2>La IA también abre preguntas sobre energía, agua, sesgos y poder.</h2>
+            <p>
+              Esta parte del sitio equilibra el entusiasmo tecnológico con una mirada crítica.
+              No todo avance técnico es automáticamente positivo.
+            </p>
+          </div>
+
+          <div class="impact-grid">
+            <article class="glass-panel impact-card">
+              <h3>Sesgos y errores</h3>
+              <p>
+                Los modelos aprenden de datos humanos y pueden reproducir prejuicios,
+                exclusiones o asociaciones injustas. También producen respuestas falsas
+                con apariencia convincente.
+              </p>
+            </article>
+
+            <article class="glass-panel impact-card">
+              <h3>Privacidad</h3>
+              <p>
+                Muchas plataformas procesan textos, imágenes o archivos que el usuario sube.
+                Por eso no conviene compartir información sensible sin revisar políticas y riesgos.
+              </p>
+            </article>
+
+            <article class="glass-panel impact-card">
+              <h3>Trabajo y educación</h3>
+              <p>
+                La IA puede aumentar productividad y personalizar el aprendizaje, pero también
+                puede generar dependencia, plagio o desplazamiento de tareas rutinarias.
+              </p>
+            </article>
+
+            <article class="glass-panel impact-card">
+              <h3>Agua y energía</h3>
+              <p>
+                Los centros de datos requieren electricidad y sistemas de enfriamiento.
+                El entrenamiento de modelos grandes y el uso masivo diario tienen un costo ambiental real.
+              </p>
+            </article>
+          </div>
+
+          <article class="deep-dive">
+            <div>
+              <p class="eyebrow">Problema IA + agua</p>
+              <h3>Por qué este tema merece una sección específica</h3>
+            </div>
+            <div class="deep-dive-copy">
+              <p>
+                La conversación sobre IA suele enfocarse en innovación, pero rara vez se explica
+                el gasto de recursos físicos detrás del cómputo. Los servidores generan calor y
+                necesitan enfriamiento; además, la energía eléctrica que consumen puede implicar
+                uso indirecto de agua y emisión de carbono.
+              </p>
+              <p>
+                Una buena web no solo muestra herramientas impresionantes. También ayuda a entender
+                que cada avance digital tiene un costo material que debe discutirse con honestidad.
+              </p>
+            </div>
+          </article>
+        </section>
+
+        <section class="section future-section" id="futuro">
+          <div class="section-heading">
+            <p class="eyebrow">06. Futuro y uso responsable</p>
+            <h2>El siguiente paso no es usar más IA por usarla, sino usarla mejor.</h2>
+            <p>
+              El futuro probablemente combine modelos multimodales, agentes más autónomos
+              y regulación más estricta. Eso exige pensamiento crítico, no dependencia ciega.
+            </p>
+          </div>
+
+          <div class="future-layout">
+            <article class="future-card">
+              <h3>Lo que probablemente crecerá</h3>
+              <ul>
+                <li>Modelos que entienden texto, imagen, audio y video al mismo tiempo.</li>
+                <li>Agentes capaces de planear tareas y operar software.</li>
+                <li>Uso más fuerte de IA en ciencia, medicina, educación y programación.</li>
+              </ul>
+            </article>
+
+            <article class="future-card">
+              <h3>Principios de uso responsable</h3>
+              <ul>
+                <li>Verificar la información antes de compartirla o citarla.</li>
+                <li>No subir datos personales, privados o confidenciales.</li>
+                <li>Usar la IA como apoyo, no como sustituto del criterio humano.</li>
+                <li>Reconocer cuándo una herramienta ahorra tiempo y cuándo distorsiona el trabajo.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Atlas IA</p>
+        <p>
+          Prototipo editorial local con estructura, diseño y navegación listos para seguir ampliando.
+        </p>
+      </footer>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
