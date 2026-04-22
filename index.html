@@ -3,520 +3,598 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atlas IA</title>
+    <title>Atlas IA · Crisis del Agua</title>
     <meta
       name="description"
-      content="Atlas IA es un sitio editorial sobre la inteligencia artificial: historia, modelos, herramientas, comparativas, impacto ambiental y uso responsable."
+      content="Experiencia interactiva sobre cómo la inteligencia artificial puede transformar la gestión del agua en ciudades, agricultura e industria."
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      :root {
+        --bg: #f3eadb;
+        --bg-2: #e9d8be;
+        --paper: #f8f2e8cc;
+        --ink: #241d17;
+        --muted: #675548;
+        --accent: #b87738;
+        --accent-2: #6f8a76;
+        --ok: #2f7d59;
+        --warn: #a8462e;
+        --radius-xl: 32px;
+        --radius-md: 18px;
+        --shadow: 0 24px 50px rgba(47, 31, 16, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: "Inter", "SF Pro Display", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 15% 12%, #fff6ea, transparent 28%),
+          radial-gradient(circle at 80% 20%, #f5e4cc, transparent 26%),
+          linear-gradient(180deg, var(--bg) 0%, #efe3cf 42%, #e6d4bb 100%);
+        line-height: 1.5;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.16;
+        background-image: linear-gradient(0deg, rgba(77, 57, 41, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(77, 57, 41, 0.06) 1px, transparent 1px);
+        background-size: 70px 70px;
+        mask-image: radial-gradient(circle at center, black 30%, transparent 88%);
+      }
+
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        width: 0;
+        z-index: 100;
+        background: linear-gradient(90deg, #9e5e2b, #e3a660);
+      }
+
+      .shell { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
+
+      .topbar {
+        position: sticky;
+        top: 14px;
+        z-index: 90;
+        margin-top: 14px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        background: #f8eee1d9;
+        border: 1px solid #d9c5a8;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 24px rgba(93, 64, 38, 0.12);
+      }
+
+      .brand { font-weight: 800; letter-spacing: -0.03em; }
+      .nav { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.9rem; }
+      .nav a { color: var(--muted); text-decoration: none; }
+
+      .hero {
+        min-height: 95vh;
+        display: grid;
+        align-items: center;
+        position: relative;
+        overflow: clip;
+        padding: 50px 0;
+      }
+
+      #flowCanvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        gap: 18px;
+        max-width: 900px;
+      }
+
+      .eyebrow { font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8a6d57; }
+      h1, h2, h3 { letter-spacing: -0.05em; margin: 0; line-height: 0.95; }
+      h1 { font-size: clamp(3rem, 9vw, 7.6rem); max-width: 12ch; }
+      h2 { font-size: clamp(2rem, 5vw, 4rem); max-width: 16ch; }
+      p { margin: 0; color: #4f4136; }
+
+      .title-reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity .7s ease, transform .7s ease;
+      }
+      .title-reveal.in { opacity: 1; transform: translateY(0); }
+
+      .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+      .btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 22px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .btn-primary { background: #2c2118; color: #f5e9db; }
+      .btn-ghost { background: #f7eddc; border: 1px solid #cfb596; color: #46362a; }
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 18px rgba(75, 53, 32, 0.14); }
+
+      .floating-note {
+        position: absolute;
+        right: 0;
+        bottom: 70px;
+        background: #f5ecdfd9;
+        border: 1px solid #d6c2a6;
+        border-radius: var(--radius-md);
+        padding: 14px;
+        max-width: 280px;
+        box-shadow: var(--shadow);
+      }
+
+      section { padding: 80px 0; position: relative; }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .panel {
+        background: var(--paper);
+        border: 1px solid #d9c6ab;
+        border-radius: var(--radius-xl);
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .stat { padding: 14px; border-radius: 14px; background: #fff7ee; border: 1px solid #dbc8ad; }
+      .stat strong { font-size: 1.8rem; display: block; }
+
+      .timeline { border-left: 2px solid #b99f82; margin-left: 10px; padding-left: 22px; display: grid; gap: 22px; }
+      .tl-item { opacity: .2; transform: translateX(20px); transition: .5s ease; }
+      .tl-item.show { opacity: 1; transform: translateX(0); }
+
+      .bars { display: grid; gap: 16px; }
+      .bar-row { display: grid; gap: 8px; }
+      .bar-track { background: #eadac3; border-radius: 999px; height: 14px; overflow: hidden; }
+      .bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, #a3642f, #dc9f5d); transition: width 1s ease; }
+
+      .myths { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; }
+      .myth {
+        perspective: 900px;
+        min-height: 190px;
+        cursor: pointer;
+      }
+      .myth-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform .6s;
+        transform-style: preserve-3d;
+      }
+      .myth.flipped .myth-inner { transform: rotateY(180deg); }
+      .myth-face {
+        position: absolute;
+        inset: 0;
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid #d1b99a;
+        backface-visibility: hidden;
+        background: #fff5e7;
+        box-shadow: var(--shadow);
+      }
+      .myth-back { transform: rotateY(180deg); background: #f0e3d1; }
+
+      .sim-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; }
+      .controls { display: grid; gap: 16px; }
+      .control label { display: flex; justify-content: space-between; font-weight: 700; font-size: .92rem; }
+      input[type="range"] { width: 100%; accent-color: #8a5224; }
+      .scenario-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+      .tab { border: 1px solid #c9af91; background: #f8efdf; padding: 8px 12px; border-radius: 999px; cursor: pointer; }
+      .tab.active { background: #34271d; color: #f9efdf; }
+      .result-pill { margin-top: 12px; display: inline-block; padding: 8px 12px; border-radius: 999px; font-weight: 700; }
+      .result-pill.good { background: #d5ebde; color: #20593d; }
+      .result-pill.mid { background: #f5e2be; color: #82541f; }
+      .result-pill.bad { background: #f3d0c9; color: #8f3623; }
+
+      .mini-chart { width: 100%; height: 190px; background: #fff5e8; border: 1px solid #d7bf9f; border-radius: 16px; }
+
+      .game-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+      .drop {
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px dashed #a88666;
+        text-align: center;
+        background: #fff6ea;
+        cursor: pointer;
+      }
+      .drop.on { background: #dceedd; border-style: solid; }
+
+      .reveal-wrap { display: grid; gap: 14px; }
+      .compare {
+        position: relative;
+        height: 280px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #d4b99b;
+      }
+      .compare img, .compare .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .layer.after { clip-path: inset(0 50% 0 0); }
+
+      .challenge-meter {
+        height: 20px;
+        background: #ead8bf;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .challenge-fill {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, #b05b2a, #2f7d59);
+        transition: width .5s ease;
+      }
+
+      .auto-story {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 99;
+        border: 1px solid #c9af90;
+        background: #f7eddf;
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+
+      .reveal { opacity: 0; transform: translateY(20px); transition: .7s ease; }
+      .reveal.in { opacity: 1; transform: translateY(0); }
+
+      @media (max-width: 980px) {
+        .split, .sim-grid { grid-template-columns: 1fr; }
+        .myths { grid-template-columns: repeat(2, 1fr); }
+        .game-grid { grid-template-columns: repeat(2, 1fr); }
+        .floating-note { position: static; margin-top: 16px; }
+      }
+
+      @media (max-width: 640px) {
+        .nav { display: none; }
+        .stats { grid-template-columns: 1fr; }
+        .myths { grid-template-columns: 1fr; }
+      }
+    </style>
   </head>
   <body>
-    <div class="page-shell">
-      <header class="site-header">
-        <a class="brand" href="#inicio">
-          <span class="brand-mark"></span>
-          <span class="brand-text">
-            <strong>Atlas IA</strong>
-            <small>Historia, herramientas e impacto</small>
-          </span>
-        </a>
-
-        <nav class="top-nav" aria-label="Principal">
-          <a href="#fundamentos">Fundamentos</a>
-          <a href="#timeline">Historia</a>
-          <a href="#catalogo">Catálogo</a>
-          <a href="#comparativa">Comparativa</a>
-          <a href="#impacto">Impacto</a>
-          <a href="#futuro">Futuro</a>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">ATLAS IA · AGUA</div>
+        <nav class="nav">
+          <a href="#historia">Historia</a>
+          <a href="#datos">Datos</a>
+          <a href="#simulador">Simulador</a>
+          <a href="#juego">Juego</a>
+          <a href="#reto">Reto</a>
         </nav>
-
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
-          Menú
-        </button>
       </header>
-
-      <nav class="mobile-nav" id="mobile-nav" aria-label="Móvil" hidden>
-        <a href="#fundamentos">Fundamentos</a>
-        <a href="#timeline">Historia</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#comparativa">Comparativa</a>
-        <a href="#impacto">Impacto</a>
-        <a href="#futuro">Futuro</a>
-      </nav>
 
       <main>
         <section class="hero" id="inicio">
-          <div class="hero-copy">
-            <p class="eyebrow">Proyecto de computación</p>
-            <h1>Una mirada clara a la inteligencia artificial.</h1>
-            <p class="hero-lead">
-              Qué es, cómo empezó, qué herramientas dominan hoy, cómo compararlas y
-              qué costos sociales y ambientales no se deben ignorar.
+          <canvas id="flowCanvas"></canvas>
+          <div class="hero-content">
+            <p class="eyebrow">Inteligencia Artificial + Agua</p>
+            <h1 class="title-reveal">El problema no es el agua. Es cómo la usamos.</h1>
+            <p>
+              Esta experiencia conecta diagnóstico, predicción y acción: cómo una red de IA reduce fugas,
+              mejora riego y evita desperdicio antes de que el sistema colapse.
             </p>
-            <div class="hero-actions">
-              <a class="button primary" href="#fundamentos">Explorar el sitio</a>
-              <a class="button secondary" href="#comparativa">Ver comparativas</a>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#historia">Explorar</a>
+              <button class="btn btn-ghost" id="runStory">Modo historia automática</button>
             </div>
           </div>
+          <aside class="floating-note reveal">
+            <strong>Impacto inmediato</strong>
+            <p>Con despliegue alto de IA, una ciudad media puede ahorrar hasta 28% de agua no facturada.</p>
+          </aside>
+        </section>
 
-          <div class="hero-visual" aria-hidden="true">
-            <article class="glass-panel hero-card hero-card-main">
-              <span class="panel-label">Panorama actual</span>
-              <h2>Texto, imagen, video, código y agentes</h2>
-              <p>
-                La IA pasó de resolver tareas concretas a producir contenido,
-                asistir decisiones y operar como interfaz de trabajo.
-              </p>
-            </article>
-
-            <article class="glass-panel hero-card hero-card-side">
-              <span class="panel-label">Idea central</span>
-              <p>
-                La IA no es una sola herramienta: es un ecosistema de modelos,
-                costos, usos y riesgos.
-              </p>
-            </article>
-
-            <article class="hero-stat">
-              <strong>6</strong>
-              <span>bloques temáticos</span>
-            </article>
+        <section id="historia" class="split reveal">
+          <div>
+            <p class="eyebrow">01 · Historia operativa</p>
+            <h2 class="title-reveal">De reaccionar tarde a anticipar en tiempo real.</h2>
+            <div class="timeline">
+              <article class="tl-item"><strong>2016</strong><p>Sensores aislados: datos sin decisión.</p></article>
+              <article class="tl-item"><strong>2020</strong><p>Modelos predictivos detectan patrones de fuga.</p></article>
+              <article class="tl-item"><strong>2023</strong><p>Visión por dron optimiza riego agrícola por sector.</p></article>
+              <article class="tl-item"><strong>2026</strong><p>Gemelos digitales simulan la red hídrica completa.</p></article>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Contadores vivos</h3>
+            <div class="stats">
+              <div class="stat"><strong data-counter="31">0</strong><span>fugas evitadas / día</span></div>
+              <div class="stat"><strong data-counter="18">0</strong><span>% energía reducida</span></div>
+              <div class="stat"><strong data-counter="240">0</strong><span>m3 recuperados / hora</span></div>
+            </div>
           </div>
         </section>
 
-        <section class="intro-strip">
-          <article>
-            <span>Aprender</span>
-            <p>Conceptos básicos para entender qué hace realmente una IA.</p>
-          </article>
-          <article>
-            <span>Comparar</span>
-            <p>Herramientas organizadas por funciones, ventajas y límites.</p>
-          </article>
-          <article>
-            <span>Cuestionar</span>
-            <p>Impacto ambiental, sesgos, privacidad y uso responsable.</p>
-          </article>
-        </section>
-
-        <section class="section editorial" id="fundamentos">
-          <div class="section-heading">
-            <p class="eyebrow">01. Fundamentos</p>
-            <h2>Antes de comparar herramientas, hay que entender qué es la IA.</h2>
-            <p>
-              Este bloque aclara términos que suelen mezclarse. La idea es evitar
-              una explicación superficial y construir una base útil para el resto del sitio.
-            </p>
-          </div>
-
-          <div class="two-column-grid">
-            <article class="content-block">
-              <h3>Qué es la inteligencia artificial</h3>
-              <ul>
-                <li>
-                  Es un campo de la computación que busca que las máquinas realicen
-                  tareas asociadas con inteligencia humana, como interpretar lenguaje,
-                  detectar patrones o generar contenido.
-                </li>
-                <li>
-                  No toda automatización es IA: un sistema con reglas fijas puede ser
-                  útil, pero no aprende ni generaliza como un modelo entrenado con datos.
-                </li>
-                <li>
-                  En la vida diaria aparece en asistentes de voz, motores de recomendación,
-                  filtros de spam, traductores y editores inteligentes.
-                </li>
-              </ul>
-            </article>
-
-            <article class="content-block">
-              <h3>IA, machine learning y deep learning</h3>
-              <ul>
-                <li><strong>IA:</strong> término amplio para sistemas que simulan tareas cognitivas.</li>
-                <li><strong>Machine learning:</strong> técnica donde el sistema aprende a partir de datos.</li>
-                <li><strong>Deep learning:</strong> enfoque basado en redes neuronales con muchas capas.</li>
-                <li>
-                  Esta diferencia importa porque no todas las herramientas actuales usan
-                  la misma complejidad ni requieren el mismo nivel de datos o cómputo.
-                </li>
-              </ul>
-            </article>
-          </div>
-
-          <div class="concept-rail">
-            <article class="glass-panel concept-card">
-              <span class="panel-label">Entrada</span>
-              <h3>Datos</h3>
-              <p>Texto, imagen, audio, video o registros históricos que el modelo analiza.</p>
-            </article>
-            <article class="glass-panel concept-card">
-              <span class="panel-label">Proceso</span>
-              <h3>Patrones</h3>
-              <p>La IA detecta relaciones estadísticas y las usa para predecir o generar.</p>
-            </article>
-            <article class="glass-panel concept-card">
-              <span class="panel-label">Salida</span>
-              <h3>Respuesta</h3>
-              <p>Un resumen, una imagen, una línea de código o una clasificación automática.</p>
-            </article>
+        <section id="datos" class="reveal">
+          <p class="eyebrow">02 · Agua en números</p>
+          <h2 class="title-reveal">Visualización dinámica del consumo antes vs. después de IA.</h2>
+          <div class="panel bars" id="barsPanel">
+            <div class="bar-row"><span>Red urbana</span><div class="bar-track"><div class="bar-fill" data-target="78"></div></div></div>
+            <div class="bar-row"><span>Agricultura</span><div class="bar-track"><div class="bar-fill" data-target="62"></div></div></div>
+            <div class="bar-row"><span>Industria</span><div class="bar-track"><div class="bar-fill" data-target="54"></div></div></div>
           </div>
         </section>
 
-        <section class="section timeline-section" id="timeline">
-          <div class="section-heading">
-            <p class="eyebrow">02. Historia</p>
-            <h2>La IA no nació con los chatbots: llegó tras décadas de intentos.</h2>
-            <p>
-              Esta línea del tiempo muestra cómo cambió la disciplina desde la lógica
-              matemática hasta los modelos multimodales capaces de trabajar con texto,
-              imagen, audio y video.
-            </p>
-          </div>
-
-          <div class="timeline">
-            <article class="timeline-item">
-              <span class="timeline-year">1950</span>
-              <h3>Alan Turing plantea la gran pregunta</h3>
-              <p>
-                Propone evaluar si una máquina puede comportarse de manera
-                suficientemente inteligente como para confundirse con un humano en conversación.
-              </p>
-            </article>
-            <article class="timeline-item">
-              <span class="timeline-year">1956</span>
-              <h3>Dartmouth y el nacimiento formal del campo</h3>
-              <p>
-                El término “inteligencia artificial” se consolida y comienza una etapa
-                de altas expectativas sobre máquinas capaces de razonar.
-              </p>
-            </article>
-            <article class="timeline-item">
-              <span class="timeline-year">1980s</span>
-              <h3>Sistemas expertos</h3>
-              <p>
-                Surgen programas que usan reglas escritas por humanos para resolver
-                tareas específicas en medicina, industria y diagnóstico.
-              </p>
-            </article>
-            <article class="timeline-item">
-              <span class="timeline-year">2012</span>
-              <h3>Deep learning gana fuerza</h3>
-              <p>
-                El uso de redes neuronales profundas junto con GPUs y grandes bases de
-                datos produce avances visibles en visión por computadora.
-              </p>
-            </article>
-            <article class="timeline-item">
-              <span class="timeline-year">2017</span>
-              <h3>Transformers cambian el juego</h3>
-              <p>
-                Esta arquitectura mejora drásticamente el tratamiento del lenguaje y abre
-                el camino para asistentes generativos más potentes.
-              </p>
-            </article>
-            <article class="timeline-item">
-              <span class="timeline-year">2022+</span>
-              <h3>Explosión de la IA generativa</h3>
-              <p>
-                Modelos de texto, imagen, video y código empiezan a integrarse en trabajo,
-                estudio, marketing, diseño y desarrollo de software.
-              </p>
-            </article>
+        <section id="mitos" class="reveal">
+          <p class="eyebrow">03 · Mitos comunes</p>
+          <h2 class="title-reveal">Haz click y rompe supuestos.</h2>
+          <div class="myths">
+            <article class="myth"><div class="myth-inner"><div class="myth-face"><h3>"IA = gasto extra"</h3></div><div class="myth-face myth-back"><p>En 12-18 meses, reducción de pérdidas compensa inversión inicial.</p></div></div></article>
+            <article class="myth"><div class="myth-inner"><div class="myth-face"><h3>"Solo sirve en ciudades ricas"</h3></div><div class="myth-face myth-back"><p>Modelos ligeros + sensores low-cost funcionan en municipios medianos.</p></div></div></article>
+            <article class="myth"><div class="myth-inner"><div class="myth-face"><h3>"La IA reemplaza equipos"</h3></div><div class="myth-face myth-back"><p>Aumenta capacidad técnica: prioriza dónde actuar primero.</p></div></div></article>
+            <article class="myth"><div class="myth-inner"><div class="myth-face"><h3>"No es precisa"</h3></div><div class="myth-face myth-back"><p>Combinada con telemetría logra alertas tempranas con error bajo.</p></div></div></article>
           </div>
         </section>
 
-        <section class="section catalog-section" id="catalogo">
-          <div class="section-heading">
-            <p class="eyebrow">03. Catálogo</p>
-            <h2>Las herramientas cambian según la tarea: no existe una “mejor IA” universal.</h2>
-            <p>
-              Filtra por categoría y revisa qué aporta cada familia de herramientas,
-              qué resuelve bien y dónde suelen fallar.
-            </p>
-          </div>
-
-          <div class="filter-bar" role="tablist" aria-label="Categorías de IA">
-            <button class="filter-pill active" type="button" data-filter="all">Todas</button>
-            <button class="filter-pill" type="button" data-filter="texto">Texto</button>
-            <button class="filter-pill" type="button" data-filter="imagen">Imagen</button>
-            <button class="filter-pill" type="button" data-filter="video">Video</button>
-            <button class="filter-pill" type="button" data-filter="codigo">Código</button>
-          </div>
-
-          <div class="catalog-grid">
-            <article class="tool-card" data-category="texto">
-              <span class="tool-type">Texto</span>
-              <h3>Asistentes conversacionales</h3>
-              <p>
-                Sirven para resumir, redactar, traducir, investigar y explicar ideas.
-                Son versátiles, pero pueden responder con seguridad incluso cuando se equivocan.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> rapidez para organizar información.</li>
-                <li><strong>Límite:</strong> riesgo de alucinaciones y citas erróneas.</li>
-                <li><strong>Ejemplos:</strong> ChatGPT, Claude, Gemini, Perplexity.</li>
-              </ul>
-            </article>
-
-            <article class="tool-card" data-category="imagen">
-              <span class="tool-type">Imagen</span>
-              <h3>Generadores visuales</h3>
-              <p>
-                Transforman descripciones en ilustraciones, retratos o escenas
-                fotorrealistas. Son útiles para diseño conceptual, identidad visual y publicidad.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> exploración creativa rápida.</li>
-                <li><strong>Límite:</strong> control fino y derechos de autor.</li>
-                <li><strong>Ejemplos:</strong> Midjourney, DALL·E, Firefly, Stable Diffusion.</li>
-              </ul>
-            </article>
-
-            <article class="tool-card" data-category="video">
-              <span class="tool-type">Video</span>
-              <h3>Modelos para secuencias y animación</h3>
-              <p>
-                Generan clips, animan imágenes y aceleran la edición audiovisual.
-                Son llamativos, pero todavía enfrentan problemas de coherencia en movimiento.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> prototipado audiovisual muy rápido.</li>
-                <li><strong>Límite:</strong> duración corta y errores visuales.</li>
-                <li><strong>Ejemplos:</strong> Runway, Pika, Sora, Kling.</li>
-              </ul>
-            </article>
-
-            <article class="tool-card" data-category="codigo">
-              <span class="tool-type">Código</span>
-              <h3>Copilotos de programación</h3>
-              <p>
-                Ayudan a escribir funciones, explicar errores y proponer refactors.
-                Mejoran productividad, pero exigen revisión técnica humana.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> acelerar tareas repetitivas.</li>
-                <li><strong>Límite:</strong> código inseguro o impreciso si no se valida.</li>
-                <li><strong>Ejemplos:</strong> GitHub Copilot, Cursor, ChatGPT, Claude.</li>
-              </ul>
-            </article>
-
-            <article class="tool-card" data-category="texto">
-              <span class="tool-type">Texto</span>
-              <h3>Motores de búsqueda con IA</h3>
-              <p>
-                Integran respuestas resumidas con fuentes y navegación web. Son útiles
-                para investigación rápida, sobre todo cuando se necesita contexto.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> síntesis con navegación.</li>
-                <li><strong>Límite:</strong> depende de la calidad de las fuentes citadas.</li>
-                <li><strong>Uso ideal:</strong> trabajos escolares y análisis comparativos.</li>
-              </ul>
-            </article>
-
-            <article class="tool-card" data-category="imagen">
-              <span class="tool-type">Imagen</span>
-              <h3>Edición asistida</h3>
-              <p>
-                Permite borrar fondos, ampliar escenas, cambiar estilos o restaurar
-                fotografías. Suele ser más práctica para producción que la generación pura.
-              </p>
-              <ul>
-                <li><strong>Fortaleza:</strong> ahorro de tiempo en retoque.</li>
-                <li><strong>Límite:</strong> resultados artificiales si se exagera la edición.</li>
-                <li><strong>Uso ideal:</strong> diseño, e-commerce y contenido social.</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
-        <section class="section comparison-section" id="comparativa">
-          <div class="section-heading">
-            <p class="eyebrow">04. Comparativa</p>
-            <h2>Comparar bien significa definir criterios, no solo elegir favoritos.</h2>
-            <p>
-              En lugar de un ranking absoluto, esta tabla resume qué herramienta tiende
-              a destacar según la tarea, el nivel de control y el presupuesto.
-            </p>
-          </div>
-
-          <div class="comparison-shell glass-panel">
-            <table class="comparison-table">
-              <thead>
-                <tr>
-                  <th>Área</th>
-                  <th>Qué se valora</th>
-                  <th>Herramientas destacadas</th>
-                  <th>Nivel de costo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Texto</td>
-                  <td>Claridad, contexto, investigación, idioma</td>
-                  <td>ChatGPT, Claude, Gemini, Perplexity</td>
-                  <td>Variable</td>
-                </tr>
-                <tr>
-                  <td>Imagen</td>
-                  <td>Estilo, detalle, control creativo, velocidad</td>
-                  <td>Midjourney, DALL·E, Firefly, Stable Diffusion</td>
-                  <td>Medio a alto</td>
-                </tr>
-                <tr>
-                  <td>Video</td>
-                  <td>Coherencia visual, movimiento, duración, edición</td>
-                  <td>Runway, Pika, Sora, Kling</td>
-                  <td>Alto</td>
-                </tr>
-                <tr>
-                  <td>Código</td>
-                  <td>Precisión técnica, contexto, productividad</td>
-                  <td>GitHub Copilot, Cursor, ChatGPT, Claude</td>
-                  <td>Medio</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="comparison-note">
-              Esta versión usa niveles de costo orientativos. Los precios exactos se pueden
-              añadir en la siguiente iteración con verificación por fecha.
-            </p>
-          </div>
-
-          <div class="ranking-grid">
-            <article class="ranking-card">
-              <span class="panel-label">Mejor para estudiantes</span>
-              <h3>Texto + búsqueda</h3>
-              <p>
-                Conviene priorizar herramientas que expliquen bien, permitan repreguntar
-                y ayuden a verificar información.
-              </p>
-            </article>
-            <article class="ranking-card">
-              <span class="panel-label">Mejor para creativos</span>
-              <h3>Imagen + video</h3>
-              <p>
-                El valor está en el estilo, la iteración visual y la rapidez para convertir
-                ideas en prototipos.
-              </p>
-            </article>
-            <article class="ranking-card">
-              <span class="panel-label">Mejor relación utilidad / costo</span>
-              <h3>Texto + código</h3>
-              <p>
-                Suelen dar más valor diario por consulta, especialmente en estudio,
-                redacción y desarrollo web.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section impact-section" id="impacto">
-          <div class="section-heading">
-            <p class="eyebrow">05. Impacto</p>
-            <h2>La IA también abre preguntas sobre energía, agua, sesgos y poder.</h2>
-            <p>
-              Esta parte del sitio equilibra el entusiasmo tecnológico con una mirada crítica.
-              No todo avance técnico es automáticamente positivo.
-            </p>
-          </div>
-
-          <div class="impact-grid">
-            <article class="glass-panel impact-card">
-              <h3>Sesgos y errores</h3>
-              <p>
-                Los modelos aprenden de datos humanos y pueden reproducir prejuicios,
-                exclusiones o asociaciones injustas. También producen respuestas falsas
-                con apariencia convincente.
-              </p>
-            </article>
-
-            <article class="glass-panel impact-card">
-              <h3>Privacidad</h3>
-              <p>
-                Muchas plataformas procesan textos, imágenes o archivos que el usuario sube.
-                Por eso no conviene compartir información sensible sin revisar políticas y riesgos.
-              </p>
-            </article>
-
-            <article class="glass-panel impact-card">
-              <h3>Trabajo y educación</h3>
-              <p>
-                La IA puede aumentar productividad y personalizar el aprendizaje, pero también
-                puede generar dependencia, plagio o desplazamiento de tareas rutinarias.
-              </p>
-            </article>
-
-            <article class="glass-panel impact-card">
-              <h3>Agua y energía</h3>
-              <p>
-                Los centros de datos requieren electricidad y sistemas de enfriamiento.
-                El entrenamiento de modelos grandes y el uso masivo diario tienen un costo ambiental real.
-              </p>
-            </article>
-          </div>
-
-          <article class="deep-dive">
+        <section id="simulador" class="reveal">
+          <p class="eyebrow">04 · Simulador protagonista</p>
+          <h2 class="title-reveal">Ajusta variables y mira el sistema responder.</h2>
+          <div class="panel sim-grid">
             <div>
-              <p class="eyebrow">Problema IA + agua</p>
-              <h3>Por qué este tema merece una sección específica</h3>
+              <div class="scenario-tabs">
+                <button class="tab active" data-scenario="bajo">Bajo IA</button>
+                <button class="tab" data-scenario="medio">Medio IA</button>
+                <button class="tab" data-scenario="alto">Alto IA</button>
+              </div>
+              <div class="controls">
+                <div class="control"><label>Sensores activos <span id="sensorsV">45</span>%</label><input id="sensors" type="range" min="0" max="100" value="45" /></div>
+                <div class="control"><label>Predicción de demanda <span id="predictV">40</span>%</label><input id="predict" type="range" min="0" max="100" value="40" /></div>
+                <div class="control"><label>Automatización de válvulas <span id="valvesV">35</span>%</label><input id="valves" type="range" min="0" max="100" value="35" /></div>
+              </div>
+              <p id="simText" class="result-pill bad">Ahorro proyectado: 18% · Riesgo de escasez: alto.</p>
             </div>
-            <div class="deep-dive-copy">
-              <p>
-                La conversación sobre IA suele enfocarse en innovación, pero rara vez se explica
-                el gasto de recursos físicos detrás del cómputo. Los servidores generan calor y
-                necesitan enfriamiento; además, la energía eléctrica que consumen puede implicar
-                uso indirecto de agua y emisión de carbono.
-              </p>
-              <p>
-                Una buena web no solo muestra herramientas impresionantes. También ayuda a entender
-                que cada avance digital tiene un costo material que debe discutirse con honestidad.
-              </p>
+            <div>
+              <canvas id="simChart" class="mini-chart" width="500" height="200" aria-label="Gráfica simulador"></canvas>
             </div>
-          </article>
+          </div>
         </section>
 
-        <section class="section future-section" id="futuro">
-          <div class="section-heading">
-            <p class="eyebrow">06. Futuro y uso responsable</p>
-            <h2>El siguiente paso no es usar más IA por usarla, sino usarla mejor.</h2>
-            <p>
-              El futuro probablemente combine modelos multimodales, agentes más autónomos
-              y regulación más estricta. Eso exige pensamiento crítico, no dependencia ciega.
-            </p>
+        <section id="juego" class="reveal split">
+          <div>
+            <p class="eyebrow">05 · Juego rápido</p>
+            <h2 class="title-reveal">Activa nodos para frenar fuga en 10 segundos.</h2>
+            <p>Haz click en los nodos correctos. Feedback inmediato, sin texto largo.</p>
           </div>
+          <div class="panel">
+            <div class="game-grid" id="gameGrid"></div>
+            <p id="gameMsg">Puntuación: 0/3</p>
+          </div>
+        </section>
 
-          <div class="future-layout">
-            <article class="future-card">
-              <h3>Lo que probablemente crecerá</h3>
-              <ul>
-                <li>Modelos que entienden texto, imagen, audio y video al mismo tiempo.</li>
-                <li>Agentes capaces de planear tareas y operar software.</li>
-                <li>Uso más fuerte de IA en ciencia, medicina, educación y programación.</li>
-              </ul>
-            </article>
+        <section id="comparador" class="reveal">
+          <p class="eyebrow">06 · Comparador visual</p>
+          <h2 class="title-reveal">Arrastra para ver red tradicional vs red con IA.</h2>
+          <div class="panel reveal-wrap">
+            <div class="compare">
+              <div class="layer" style="background:linear-gradient(120deg,#ab7752,#e8c49f)"></div>
+              <div class="layer after" id="afterLayer" style="background:linear-gradient(120deg,#53705f,#b9d5bc)"></div>
+            </div>
+            <input id="compareRange" type="range" min="0" max="100" value="50" />
+          </div>
+        </section>
 
-            <article class="future-card">
-              <h3>Principios de uso responsable</h3>
-              <ul>
-                <li>Verificar la información antes de compartirla o citarla.</li>
-                <li>No subir datos personales, privados o confidenciales.</li>
-                <li>Usar la IA como apoyo, no como sustituto del criterio humano.</li>
-                <li>Reconocer cuándo una herramienta ahorra tiempo y cuándo distorsiona el trabajo.</li>
-              </ul>
-            </article>
+        <section id="reto" class="reveal">
+          <p class="eyebrow">07 · Reto de eficiencia</p>
+          <h2 class="title-reveal">Objetivo: superar 85% de eficiencia hídrica.</h2>
+          <div class="panel">
+            <div class="challenge-meter"><div class="challenge-fill" id="challengeFill"></div></div>
+            <p id="challengeText" style="margin-top:10px">Eficiencia actual: 0%</p>
+            <button class="btn btn-primary" id="challengeBtn" style="margin-top:14px">Intentar mejora</button>
           </div>
         </section>
       </main>
-
-      <footer class="site-footer">
-        <p>Atlas IA</p>
-        <p>
-          Prototipo editorial local con estructura, diseño y navegación listos para seguir ampliando.
-        </p>
-      </footer>
     </div>
 
-    <script src="./script.js"></script>
+    <button class="auto-story" id="autoStory">▶ Story</button>
+
+    <script>
+      const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+      const progress = document.getElementById("scrollProgress");
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => e.isIntersecting && e.target.classList.add("in"));
+      }, { threshold: 0.18 });
+
+      $$(".reveal, .title-reveal, .tl-item").forEach((el) => revealObs.observe(el));
+
+      window.addEventListener("scroll", () => {
+        const h = document.documentElement;
+        const ratio = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = ratio + "%";
+      });
+
+      const counterObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const max = Number(el.dataset.counter);
+          let current = 0;
+          const step = Math.max(1, Math.ceil(max / 30));
+          const timer = setInterval(() => {
+            current += step;
+            el.textContent = Math.min(current, max);
+            if (current >= max) clearInterval(timer);
+          }, 35);
+          counterObs.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      $$("[data-counter]").forEach((el) => counterObs.observe(el));
+
+      const barsObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          $$(".bar-fill", e.target).forEach((bar) => bar.style.width = bar.dataset.target + "%");
+          barsObs.unobserve(e.target);
+        });
+      }, { threshold: 0.35 });
+      barsObs.observe(document.getElementById("barsPanel"));
+
+      $$(".myth").forEach((card) => card.addEventListener("click", () => card.classList.toggle("flipped")));
+
+      const sliders = ["sensors", "predict", "valves"].map((id) => document.getElementById(id));
+      const labels = { sensors: "sensorsV", predict: "predictV", valves: "valvesV" };
+      const simText = document.getElementById("simText");
+      const simCanvas = document.getElementById("simChart");
+      const sctx = simCanvas.getContext("2d");
+      let scenarioBoost = 0.8;
+
+      function drawChart(values) {
+        sctx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+        sctx.strokeStyle = "#8f592c";
+        sctx.lineWidth = 3;
+        sctx.beginPath();
+        values.forEach((v, i) => {
+          const x = 20 + i * 75;
+          const y = 180 - v * 1.2;
+          if (i === 0) {
+            sctx.moveTo(x, y);
+          } else {
+            sctx.lineTo(x, y);
+          }
+        });
+        sctx.stroke();
+      }
+
+      function updateSim() {
+        const vals = sliders.map((s) => Number(s.value));
+        sliders.forEach((s) => document.getElementById(labels[s.id]).textContent = s.value);
+        const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+        const score = Math.round(Math.min(100, avg * scenarioBoost));
+        const risk = Math.max(0, 100 - score);
+        simText.textContent = `Ahorro proyectado: ${score}% · Riesgo de escasez: ${risk > 45 ? "alto" : risk > 20 ? "medio" : "bajo"}.`;
+        simText.className = "result-pill " + (score > 70 ? "good" : score > 45 ? "mid" : "bad");
+        drawChart([100 - vals[0], 100 - vals[1], 100 - vals[2], risk, score]);
+      }
+
+      sliders.forEach((s) => s.addEventListener("input", updateSim));
+      $$(".tab").forEach((tab) => tab.addEventListener("click", () => {
+        $$(".tab").forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        scenarioBoost = ({ bajo: 0.75, medio: 0.95, alto: 1.15 })[tab.dataset.scenario];
+        updateSim();
+      }));
+      updateSim();
+
+      const gameGrid = document.getElementById("gameGrid");
+      const gameMsg = document.getElementById("gameMsg");
+      const winning = new Set([1, 4, 7]);
+      let chosen = new Set();
+      for (let i = 0; i < 8; i++) {
+        const b = document.createElement("button");
+        b.className = "drop";
+        b.textContent = "Nodo " + (i + 1);
+        b.addEventListener("click", () => {
+          b.classList.toggle("on");
+          if (chosen.has(i)) {
+            chosen.delete(i);
+          } else {
+            chosen.add(i);
+          }
+          const score = [...chosen].filter((n) => winning.has(n)).length;
+          gameMsg.textContent = `Puntuación: ${score}/3`;
+          gameMsg.style.color = score === 3 ? "#1e6a49" : "#5e4b3c";
+        });
+        gameGrid.appendChild(b);
+      }
+
+      const compareRange = document.getElementById("compareRange");
+      const afterLayer = document.getElementById("afterLayer");
+      compareRange.addEventListener("input", () => {
+        afterLayer.style.clipPath = `inset(0 ${100 - compareRange.value}% 0 0)`;
+      });
+
+      let efficiency = 0;
+      const fill = document.getElementById("challengeFill");
+      const ctext = document.getElementById("challengeText");
+      document.getElementById("challengeBtn").addEventListener("click", () => {
+        efficiency = Math.min(100, efficiency + Math.floor(Math.random() * 16) + 8);
+        fill.style.width = efficiency + "%";
+        ctext.textContent = `Eficiencia actual: ${efficiency}% ${efficiency >= 85 ? "✅ Objetivo cumplido" : "- sigue optimizando."}`;
+        ctext.style.color = efficiency >= 85 ? "#1f6a48" : "#5a4738";
+      });
+
+      function autoStoryRun() {
+        const sections = ["historia", "datos", "mitos", "simulador", "juego", "comparador", "reto"];
+        let i = 0;
+        const timer = setInterval(() => {
+          document.getElementById(sections[i]).scrollIntoView({ behavior: "smooth", block: "start" });
+          i += 1;
+          if (i >= sections.length) clearInterval(timer);
+        }, 1600);
+      }
+      document.getElementById("autoStory").addEventListener("click", autoStoryRun);
+      document.getElementById("runStory").addEventListener("click", autoStoryRun);
+
+      const canvas = document.getElementById("flowCanvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      function resize() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+      function initParticles() {
+        particles = Array.from({ length: 70 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          r: Math.random() * 2 + 0.6
+        }));
+      }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(143,89,44,0.35)";
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
+      resize();
+      initParticles();
+      animate();
+      window.addEventListener("resize", () => {
+        resize();
+        initParticles();
+      });
+    </script>
   </body>
 </html>
