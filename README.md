@@ -1,22 +1,16 @@
-# Atlas IA
+# Atlas IA · Crisis del Agua
 
-Sitio editorial local sobre inteligencia artificial con una dirección visual inspirada en Apple/iOS.
+Nueva versión del sitio de Atlas IA enfocada en el uso de inteligencia artificial para mejorar la gestión del agua.
 
 ## Incluye
 
-- Hero editorial con navegación por secciones
-- Bloque de fundamentos sobre IA
-- Línea del tiempo histórica
-- Catálogo filtrable por tipo de herramienta
-- Comparativa general por áreas
-- Sección crítica sobre impacto, agua y energía
-- Diseño responsive en HTML, CSS y JavaScript plano
-
-## Archivos
-
-- `index.html`
-- `styles.css`
-- `script.js`
+- Hero interactivo con animación en canvas
+- Historia operativa con timeline y contadores
+- Visualización de consumo antes vs. después de IA
+- Tarjetas de mitos con efecto flip
+- Simulador con sliders y gráfica en tiempo real
+- Minijuego de nodos, comparador visual y reto final
+- Implementación en un solo `index.html`
 
 ## Uso local
 
